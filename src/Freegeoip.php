@@ -4,8 +4,17 @@ namespace Siro\Freegeoip;
 
 use SimpleXMLElement;
 
+/**
+ * Class for get geolocation information from a Freegeoip server.
+ */
 class Freegeoip
 {
+    /**
+     * The host name (e.g. http://localhost:7000).
+     * Must be modified in config/freegeoip.php
+     * 
+     * @var string
+     */
     private $host;
 
     public function __construct(array $params)
@@ -16,6 +25,12 @@ class Freegeoip
         $this->host = $params['host'];
     }
 
+    /**
+     * Returns the geolocation data object fetched as a JSON response.
+     * 
+     * @param string $ip The ip address to geolocate.
+     * @return object The stdclass with the data came from json response.
+     */
     public function json(string $ip)
     {
         $data = $this->request('json', $ip);
@@ -37,6 +52,12 @@ class Freegeoip
         return $obj;
     }
 
+    /**
+     * Returns the geolocation data object fetched as a XML response.
+     * 
+     * @param string $ip The ip address to geolocate.
+     * @return object The stdclass with the data came from xml response.
+     */
     public function xml(string $ip)
     {
         $data = $this->request('xml', $ip);
@@ -58,6 +79,12 @@ class Freegeoip
         return $obj;
     }
 
+    /**
+     * Returns the geolocation data object fetched as a CSV response.
+     * 
+     * @param string $ip The ip address to geolocate.
+     * @return object The stdclass with the data came from csv response.
+     */
     public function csv(string $ip)
     {
         $data = $this->request('csv', $ip);
@@ -79,7 +106,13 @@ class Freegeoip
         return $obj;
     }
 
-    public function request(string $format = 'json', string $ip)
+    /**
+     * Requests geolocation data from the freegeoip server.
+     * 
+     * @param string $format Defaults to JSON request (csv, json and xml allowed)
+     * @param string $ip The host ip or nameserver (62.175.2.237 or tweetbeeg.com)
+     */
+    public function request(string $format='json', string $ip)
     {
         if($format !== 'json' && $format !== 'xml' && $format !== 'csv') {
             throw new \Exception("Unknow format.");
@@ -90,6 +123,13 @@ class Freegeoip
         return $response;
     }
 
+    /**
+     * Gets the geolocation response as a string using cURL.
+     * 
+     * @param string $url The URL to fetch
+     * @throws Exception throws an exception if cURL is not enabled
+     *  or the Freegeoip server does not return data.
+     */
     private function fetchUrl(string $url)
     {
         if(!function_exists('curl_init')) {
