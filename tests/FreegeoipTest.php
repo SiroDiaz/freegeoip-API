@@ -14,6 +14,18 @@ class FreegeoipTest extends TestCase
         ]);
     }
 
+    public function testRequestOkInAllResponseFormats() {
+        $response = $this->api->request('184.34.65.120');
+        $this->assertNotEmpty($response);
+    }
+
+    public function testRequestWithNotFoundMessage()
+    {
+        $response = $this->api->request('184.34.650');
+        $this->assertNotEmpty($response);
+        $this->assertContains('404 page not found', $response);
+    }
+
     public function testJsonOkResponse()
     {
         $response = $this->api->json('184.34.65.120');

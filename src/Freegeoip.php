@@ -33,7 +33,7 @@ class Freegeoip
      */
     public function json(string $ip)
     {
-        $data = $this->request('json', $ip);
+        $data = $this->request($ip, 'json');
         $jsonObject = json_decode($data);
 
         $obj = new \stdclass();
@@ -60,7 +60,7 @@ class Freegeoip
      */
     public function xml(string $ip)
     {
-        $data = $this->request('xml', $ip);
+        $data = $this->request($ip, 'xml');
         $xmlObject = new SimpleXMLElement($data);
         
         $obj = new \stdclass();
@@ -87,7 +87,7 @@ class Freegeoip
      */
     public function csv(string $ip)
     {
-        $data = $this->request('csv', $ip);
+        $data = $this->request($ip, 'csv');
         $csvArray = explode(',', $data);
 
         $obj = new \stdclass();
@@ -112,7 +112,7 @@ class Freegeoip
      * @param string $format Defaults to JSON request (csv, json and xml allowed)
      * @param string $ip The host ip or nameserver (62.175.2.237 or tweetbeeg.com)
      */
-    public function request(string $format='json', string $ip)
+    public function request(string $ip, string $format='json')
     {
         if($format !== 'json' && $format !== 'xml' && $format !== 'csv') {
             throw new \Exception("Unknow format.");
